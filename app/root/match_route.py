@@ -13,10 +13,13 @@ def get_all_matches() -> Response:
 
 @match_bp.route('', methods=['POST'])
 def create_match() -> Response:
-    content = request.get_json()
-    match = FMatch.create_from_dto(content)
-    match_controller.create(match)
-    return make_response(jsonify(match.put_into_dto()), HTTPStatus.CREATED)
+    try:
+        content = request.get_json()
+        match = FMatch.create_from_dto(content)
+        match_controller.create(match)
+        return make_response(jsonify(match.put_into_dto()), HTTPStatus.CREATED)
+    except Exception as e:
+        return make_response(jsonify(f"{e}"), HTTPStatus.BAD_REQUEST)
 
 
 @match_bp.route('/<int:match_id>', methods=['GET'])
@@ -34,12 +37,18 @@ def update_match(match_id: int) -> Response:
 
 @match_bp.route('/<int:match_id>', methods=['PATCH'])
 def patch_match(match_id: int) -> Response:
-    content = request.get_json()
-    match_controller.patch(match_id, content)
-    return make_response("Match updated", HTTPStatus.OK)
+    try:
+        content = request.get_json()
+        match_controller.patch(match_id, content)
+        return make_response("Match updated", HTTPStatus.OK)
+    except Exception as e:
+        return make_response(jsonify(f"{e}"), HTTPStatus.BAD_REQUEST)
 
 
 @match_bp.route('/<int:match_id>', methods=['DELETE'])
 def delete_match(match_id: int) -> Response:
-    match_controller.delete(match_id)
-    return make_response("Match deleted", HTTPStatus.OK)
+    try:
+        match_controller.delete(match_id)
+        return make_response("Match deleted", HTTPStatus.OK)
+    except Exception as e:
+        return make_response(jsonify(f"{e}"), HTTPStatus.BAD_REQUEST)

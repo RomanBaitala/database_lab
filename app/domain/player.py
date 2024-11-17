@@ -42,3 +42,24 @@ class Player(db.Model):
             team_id=dto_dict.get('team_id'),
         )
         return player
+
+
+def insert_players(n):
+    players = [
+        Player(
+            name=f"No-name{i}",
+            surname=f"Surname{i}",
+            nationality="Unknown",
+            age=20 + i,
+            team_id=1
+        )
+        for i in range(n)
+    ]
+
+    try:
+        db.session.bulk_save_objects(players)
+        db.session.commit()
+        return players
+    except Exception:
+        db.session.rollback()
+        return -1

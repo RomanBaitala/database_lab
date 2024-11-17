@@ -29,3 +29,20 @@ class Stadium(db.Model):
             location=dto_dict.get('location'),
         )
         return stadium
+
+
+def get_through_capacity(stat_type):
+    if stat_type == 'MAX':
+        result = db.session.query(db.func.max(Stadium.capacity)).scalar()
+        return result
+    elif stat_type == 'MIN':
+        result = db.session.query(db.func.min(Stadium.capacity)).scalar()
+        return result
+    elif stat_type == 'SUM':
+        result = db.session.query(db.func.sum(Stadium.capacity)).scalar()
+        return result
+    elif stat_type == 'AVG':
+        result = db.session.query(db.func.avg(Stadium.capacity)).scalar()
+        return result
+    else:
+        return -1

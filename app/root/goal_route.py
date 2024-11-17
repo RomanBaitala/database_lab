@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import goal_controller
-from ..domain.goal import Goal
+from ..domain.goal import Goal, insert_goal
 
 goal_bp = Blueprint('goal', __name__, url_prefix='/goal')
 
@@ -17,6 +17,18 @@ def create_goal() -> Response:
     goal = Goal.create_from_dto(content)
     goal_controller.create(goal)
     return make_response(jsonify(goal.put_into_dto()), HTTPStatus.CREATED)
+
+
+@goal_bp.route('/parametrized', methods=['POST'])
+def insert_parametrized() -> Response:
+    content = request.get_json()
+    new_goal = insert_goal(
+        time=content['time'],
+        player_id=content['player_id'],
+        player_team_id=content['player_team_id'],
+        match_id=content['match_id']
+    )
+    return make_response(jsonify(new_goal.put_into_dto()), HTTPStatus.CREATED)
 
 
 @goal_bp.route('/<int:goal_id>', methods=['GET'])

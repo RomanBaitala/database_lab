@@ -19,6 +19,20 @@ def create_player_has_start_lineup() -> Response:
     return make_response(jsonify(player_has_start_lineup.put_into_dto()), HTTPStatus.CREATED)
 
 
+@player_has_start_lineup_bp.route('/new_link', methods=['POST'])
+def add_player_to_lineup():
+    data = request.get_json()
+    player_name = data['name']
+    player_surname = data['surname']
+    lineup_id = data['lineup_id']
+
+    try:
+        new_link = PlayerHasStartLineup.add_player_to_start_lineup(player_name, player_surname, lineup_id)
+        return make_response(jsonify(new_link.put_into_dto()), HTTPStatus.CREATED)
+    except ValueError as e:
+        return make_response(str(e), HTTPStatus.BAD_REQUEST)
+
+
 @player_has_start_lineup_bp.route('/<int:player_has_start_lineup_id>', methods=['GET'])
 def get_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
     return make_response(jsonify(player_has_start_lineup_controller.find_by_id(player_has_start_lineup_id)), HTTPStatus.OK)

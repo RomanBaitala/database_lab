@@ -18,6 +18,7 @@ def register_routes(app: Flask) -> None:
     from .player_stat_route import player_stat_bp
     from .referee_has_referee_team_route import referee_has_referee_team_bp
     from .player_has_start_lineup_route import player_has_start_lineup_bp
+    from .transfer_route import transfer_bp
 
     app.register_blueprint(referee_bp)
     app.register_blueprint(league_bp)
@@ -32,3 +33,4 @@ def register_routes(app: Flask) -> None:
     app.register_blueprint(player_stat_bp)
     app.register_blueprint(referee_has_referee_team_bp)
     app.register_blueprint(player_has_start_lineup_bp)
+    app.register_blueprint(transfer_bp)

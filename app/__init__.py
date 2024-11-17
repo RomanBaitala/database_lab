@@ -6,7 +6,6 @@ from app.root import register_routes
 import os
 import sys
 
-print(sys.path)
 db = SQLAlchemy()
 
 

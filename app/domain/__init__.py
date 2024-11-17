@@ -11,3 +11,4 @@ from .match_stat import MatchStat
 from .referee_has_referee_team import RefereeHasRefereeTeam
 from .player_has_start_lineup import PlayerHasStartLineup
 from .referee_team import RefereeTeam
+from .transfers import Transfer

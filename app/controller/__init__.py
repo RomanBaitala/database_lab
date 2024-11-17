@@ -11,6 +11,7 @@ from .goal_controller import GoalController
 from .player_controller import PlayerController
 from .player_has_start_lineup_controller import PlayerHasStartLineupController
 from .referee_has_referee_team_controller import RefereeHasRefereeTeamController
+from .transfer_controller import TransferController
 
 match_controller = MatchController()
 referee_controller = RefereeController()
@@ -25,3 +26,4 @@ goal_controller = GoalController()
 player_controller = PlayerController()
 player_has_start_lineup_controller = PlayerHasStartLineupController()
 referee_has_referee_team_controller = RefereeHasRefereeTeamController()
+transfer_controller = TransferController()

@@ -1,7 +1,9 @@
 from http import HTTPStatus
+from typing import Tuple
+
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import player_controller
-from ..domain.player import Player
+from ..domain.player import Player, insert_players
 
 player_bp = Blueprint('player', __name__, url_prefix='/player')
 
@@ -22,6 +24,17 @@ def create_player() -> Response:
 @player_bp.route('/<int:player_id>', methods=['GET'])
 def get_player(player_id: int) -> Response:
     return make_response(jsonify(player_controller.find_by_id(player_id)), HTTPStatus.OK)
+
+
+@player_bp.route('/auto_insert', methods=['POST'])
+def auto_players_create() -> Response | tuple[Response, int]:
+    num_players = request.args.get('amount')
+    result = insert_players(int(num_players))
+    if result != -1:
+        res = [player.put_into_dto() for player in result]
+        return jsonify({"new_players": res})
+    else:
+        return jsonify({"error"}), 400
 
 
 @player_bp.route('/<int:player_id>', methods=['PUT'])

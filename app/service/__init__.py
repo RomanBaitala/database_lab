@@ -11,6 +11,7 @@ from .goal_service import GoalService
 from .team_service import TeamService
 from .player_has_start_lineup_service import PlayerHasStartLineupService
 from .referee_has_referee_team_service import RefereeHasRefereeTeamService
+from .transfer_service import TransferService
 
 match_service = MatchService()
 player_stat_service = PlayerStatService()
@@ -25,3 +26,4 @@ goal_service = GoalService()
 team_service = TeamService()
 player_has_start_lineup_service = PlayerHasStartLineupService()
 referee_has_referee_team_service = RefereeHasRefereeTeamService()
+transfer_service = TransferService()

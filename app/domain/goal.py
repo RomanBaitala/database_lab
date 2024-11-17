@@ -34,3 +34,10 @@ class Goal(db.Model):
             match_id=dto_dict.get('match_id'),
         )
         return goal
+
+
+def insert_goal(time: float, player_id: int, player_team_id: int, match_id: int) -> Goal:
+    new_goal = Goal(time=time, player_id=player_id, player_team_id=player_team_id, match_id=match_id)
+    db.session.add(new_goal)
+    db.session.commit()
+    return new_goal
