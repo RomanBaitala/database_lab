@@ -4,6 +4,7 @@ from app import db
 from random import randint, choice
 from time import time
 from sqlalchemy import text
+from ..connection import create_connection
 
 
 class League(db.Model):
@@ -36,28 +37,14 @@ class League(db.Model):
 
 
 def create_dynamic_tables_from_leagues():
-    leagues = League.query.all()
-    if not leagues:
-        return "No leagues found in the database."
-
-    table_count = randint(1, 9)
-    created_tables = []
-
-    for league in leagues[:table_count]:
-        league_name = league.name.replace(" ", "_")
-        table_name = f"{league_name}_{int(time())}"
-
-        column_defs = []
-        for i in range(randint(1, 9)):
-            column_name = f"column_{i + 1}"
-            column_type = choice(["INT", "VARCHAR(255)", "DATE"])
-            column_defs.append(f"{column_name} {column_type}")
-        column_defs_str = ", ".join(column_defs)
-
-        create_table_sql = text(f"CREATE TABLE {table_name} (id INT PRIMARY KEY AUTO_INCREMENT, {column_defs_str});")
-
-        db.session.execute(create_table_sql)
-        db.session.commit()
-        created_tables.append(table_name)
-
-    return created_tables
+    connection = create_connection()
+    cursor = connection.cursor()
+    try:
+        cursor.callproc('create_dynamic_tables_from_leagues')
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()

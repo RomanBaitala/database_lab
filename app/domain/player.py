@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Dict, Any
 from app import db
+from ..connection import create_connection
 
 
 class Player(db.Model):
@@ -44,22 +45,15 @@ class Player(db.Model):
         return player
 
 
-def insert_players(n):
-    players = [
-        Player(
-            name=f"No-name{i}",
-            surname=f"Surname{i}",
-            nationality="Unknown",
-            age=20 + i,
-            team_id=1
-        )
-        for i in range(n)
-    ]
-
+def insert_players():
+    connection = create_connection()
+    cursor = connection.cursor()
     try:
-        db.session.bulk_save_objects(players)
-        db.session.commit()
-        return players
-    except Exception:
-        db.session.rollback()
-        return -1
+        cursor.callproc('create_rows_in_table')
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Dict, Any
 from app import db
+from ..connection import create_connection
 
 
 class Goal(db.Model):
@@ -37,7 +38,16 @@ class Goal(db.Model):
 
 
 def insert_goal(time: float, player_id: int, player_team_id: int, match_id: int) -> Goal:
-    new_goal = Goal(time=time, player_id=player_id, player_team_id=player_team_id, match_id=match_id)
-    db.session.add(new_goal)
-    db.session.commit()
-    return new_goal
+    connection = create_connection()
+    cursor = connection.cursor()
+    try:
+        cursor.callproc('parametrized_insertion', (time, player_id, player_team_id, match_id))
+        connection.commit()
+        new_goal = Goal(time=time, player_id=player_id, player_team_id=player_team_id, match_id=match_id)
+        return new_goal
+    except Exception as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()

@@ -9,7 +9,7 @@ VALUES
 (7, 'Primeira Liga', 18),
 (8, 'MLS', 27),
 (9, 'Turkish Super Lig', 20),
-(10, 'J-League', 18);
+(10, 'J League', 18);
 
 
 INSERT INTO stadium (id, name, capacity, location)

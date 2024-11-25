@@ -14,10 +14,8 @@ def get_all_leagues() -> Response:
 
 @league_bp.route('/create_dynamic_tables', methods=['POST'])
 def create_tables_endpoint():
-    table_names = create_dynamic_tables_from_leagues()
-    if isinstance(table_names, str):
-        return jsonify({"error": table_names}), 404
-    return jsonify({"message": f"Tables {', '.join(table_names)} created successfully!"}), 201
+    create_dynamic_tables_from_leagues()
+    return make_response(jsonify({"message": "created successfully!"}), HTTPStatus.CREATED)
 
 
 @league_bp.route('', methods=['POST'])

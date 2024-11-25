@@ -16,11 +16,8 @@ def get_all_stadiums() -> Response:
 @stadium_bp.route('capacity', methods=['GET'])
 def get_stadiums_via_capacitance() -> Response | tuple[Response, int]:
     stat_type = request.args.get('stat_type').upper()
-    result = get_through_capacity(stat_type)
-    if result != -1:
-        return jsonify({stat_type: result})
-    else:
-        return jsonify({"error": "Invalid stat_type. Use MAX, MIN, SUM, or AVG"}), 400
+    res = get_through_capacity(stat_type)
+    return make_response(jsonify({stat_type: res}), HTTPStatus.OK)
 
 
 @stadium_bp.route('', methods=['POST'])

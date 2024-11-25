@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Dict, Any
 from app import db
+from ..connection import create_connection
 
 
 class Stadium(db.Model):
@@ -32,17 +33,17 @@ class Stadium(db.Model):
 
 
 def get_through_capacity(stat_type):
-    if stat_type == 'MAX':
-        result = db.session.query(db.func.max(Stadium.capacity)).scalar()
-        return result
-    elif stat_type == 'MIN':
-        result = db.session.query(db.func.min(Stadium.capacity)).scalar()
-        return result
-    elif stat_type == 'SUM':
-        result = db.session.query(db.func.sum(Stadium.capacity)).scalar()
-        return result
-    elif stat_type == 'AVG':
-        result = db.session.query(db.func.avg(Stadium.capacity)).scalar()
-        return result
-    else:
-        return -1
+    connection = create_connection()
+    cursor = connection.cursor()
+    try:
+        cursor.callproc('info_about_capacity', (stat_type,))
+        connection.commit()
+        cursor.execute("SELECT @result;")
+        return cursor.fetchone()[0]
+
+    except Exception as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()

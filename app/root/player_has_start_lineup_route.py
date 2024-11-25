@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import player_has_start_lineup_controller
-from ..domain.player_has_start_lineup import PlayerHasStartLineup
+from ..domain.player_has_start_lineup import PlayerHasStartLineup, add_player_to_start_lineup
 
 player_has_start_lineup_bp = Blueprint('player_has_start_lineup', __name__, url_prefix='/player_has_start_lineup')
 
@@ -27,8 +27,8 @@ def add_player_to_lineup():
     lineup_id = data['lineup_id']
 
     try:
-        new_link = PlayerHasStartLineup.add_player_to_start_lineup(player_name, player_surname, lineup_id)
-        return make_response(jsonify(new_link.put_into_dto()), HTTPStatus.CREATED)
+        add_player_to_start_lineup(player_name, player_surname, lineup_id)
+        return make_response(jsonify({"message": "The player added succesfully"}), HTTPStatus.CREATED)
     except ValueError as e:
         return make_response(str(e), HTTPStatus.BAD_REQUEST)
 

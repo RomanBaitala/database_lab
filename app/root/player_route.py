@@ -28,13 +28,8 @@ def get_player(player_id: int) -> Response:
 
 @player_bp.route('/auto_insert', methods=['POST'])
 def auto_players_create() -> Response | tuple[Response, int]:
-    num_players = request.args.get('amount')
-    result = insert_players(int(num_players))
-    if result != -1:
-        res = [player.put_into_dto() for player in result]
-        return jsonify({"new_players": res})
-    else:
-        return jsonify({"error"}), 400
+    insert_players()
+    return make_response(jsonify({"message": 'Players are created succesfully!'}), HTTPStatus.CREATED)
 
 
 @player_bp.route('/<int:player_id>', methods=['PUT'])

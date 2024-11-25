@@ -3,6 +3,7 @@ from typing import Dict, Any
 from app import db
 from .player import Player
 from .start_lineup import StartLineup
+from ..connection import create_connection
 
 
 class PlayerHasStartLineup(db.Model):
@@ -29,19 +30,18 @@ class PlayerHasStartLineup(db.Model):
         )
         return player_has_start_lineup
 
-    @staticmethod
-    def add_player_to_start_lineup(player_name: str, player_surname: str, lineup_id: int) -> PlayerHasStartLineup:
-        player = Player.query.filter_by(name=player_name, surname=player_surname).first()
-        if not player:
-            raise ValueError("Player not found")
 
-        lineup = StartLineup.query.get(lineup_id)
-        if not lineup:
-            raise ValueError("Start lineup not found")
+def add_player_to_start_lineup(p_player_name: str, p_player_surname: str, p_lineup_id: int):
+    connection = create_connection()
+    cursor = connection.cursor()
+    try:
+        cursor.callproc('many_to_many_relation', (p_player_name, p_player_surname, p_lineup_id))
+        connection.commit()
 
-        player_has_start_lineup = PlayerHasStartLineup(player_id=player.id, start_lineup_id=lineup.id)
-        db.session.add(player_has_start_lineup)
-        db.session.commit()
-        return player_has_start_lineup
-
-
+        # return new_start_lineup
+    except Exception as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()
