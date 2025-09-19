@@ -4,9 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from app.config import Config
 from app.root import register_routes
 import os
-import sys
 
-print(sys.path)
 db = SQLAlchemy()
 
 
@@ -23,13 +21,12 @@ def create_app():
 
 def create_database():
     connection = mysql.connector.connect(
-        host='127.0.0.1',
-        user='root',
-        password='root',
-        database='counterDb'
+        host=os.environ.get("DB_HOST", "127.0.0.1"),
+        user=os.environ.get('DB_USER', 'root'),
+        password=os.environ.get('DB_PASSWORD', 'root'),
     )
     cursor = connection.cursor()
-    cursor.execute("CREATE DATABASE IF NOT EXISTS footballdb")
+    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {os.environ.get('DB_NAME', 'footballdb')}")
     cursor.close()
     connection.close()
 
@@ -43,10 +40,10 @@ def populate_data():
     sql_file_path = os.path.abspath('data.sql')
     if os.path.exists('data.sql'):
         connection = mysql.connector.connect(
-            host='127.0.0.1',
-            user='root',
-            password='root',
-            database='footballdb'
+            host=os.environ.get("DB_HOST", "127.0.0.1"),
+            user=os.environ.get('DB_USER', 'root'),
+            password=os.environ.get('DB_PASSWORD', 'root'),
+            database=os.environ.get('DB_NAME', 'footballdb')
         )
         cursor = connection.cursor()
         with open(sql_file_path, 'r') as sql_file:
