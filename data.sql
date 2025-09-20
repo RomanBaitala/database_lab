@@ -179,7 +179,8 @@ VALUES
 (7, 39.0, 7, 7, 4),
 (8, 52.5, 8, 8, 4),
 (9, 74.0, 9, 9, 5),
-(10, 90.0, 10, 10, 5);
+(10, 90.0, 10, 10, 5),
+(11, 56.0, 10, 10, 5);
 
 INSERT INTO player_has_start_lineup (start_lineup_id, player_id)
 VALUES
