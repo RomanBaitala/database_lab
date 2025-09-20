@@ -8,4 +8,3 @@ class Config:
         f"{os.environ.get('DB_PORT', 3306)}/"
         f"{os.environ.get('DB_NAME', 'footballdb')}"
     )
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
