@@ -1,6 +1,8 @@
 import mysql.connector
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_smorest import Api
+from flasgger import Swagger
 from app.config import Config
 from app.root import register_routes
 import os
@@ -11,6 +13,8 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    swagger = Swagger(app)
+
     db.init_app(app)
     register_routes(app)
     create_database()
