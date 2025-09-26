@@ -1,11 +1,52 @@
 import mysql.connector
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_smorest import Api
+from flask_jwt_extended import JWTManager
+from blocklist import BLOCKLIST
 from flasgger import Swagger
 from app.config import Config
 from app.root import register_routes
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+jwt = JWTManager()
+
+swagger_template = {
+    "swagger": "2.0",   # Flasgger defaults to Swagger 2.0, not OpenAPI 3.0
+    "info": {
+        "title": "My API",
+        "description": "API documentation for football website",
+        "version": "1.0.0",
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+        }
+    },
+    "security": [
+        {
+            "Bearer": []
+        }
+    ]
+}
+
+@jwt.token_in_blocklist_loader
+def check_if_token_in_blocklist(jwt_header, jwt_payload):
+    return jwt_payload["jti"] in BLOCKLIST
+
+
+@jwt.revoked_token_loader
+def revoked_token_callback(jwt_header, jwt_payload):
+    return (
+        jsonify(
+            {"description": "The token has been revoked.", "error": "token_revoked"}
+        ),
+        401,
+    )
 
 db = SQLAlchemy()
 
@@ -13,9 +54,11 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    swagger = Swagger(app)
+    app.config['JWT_SECRET_KEY'] =  os.environ.get('JWT_SECRET_KEY')
+    swagger = Swagger(app, template=swagger_template)
 
     db.init_app(app)
+    jwt.init_app(app)
     register_routes(app)
     create_database()
     create_tables(app)
@@ -25,12 +68,12 @@ def create_app():
 
 def create_database():
     connection = mysql.connector.connect(
-        host=os.environ.get("DB_HOST", "127.0.0.1"),
-        user=os.environ.get('DB_USER', 'root'),
-        password=os.environ.get('DB_PASSWORD', 'root'),
+        host=os.environ.get("DB_HOST"),
+        user=os.environ.get('DB_USER'),
+        password=os.environ.get('DB_PASSWORD'),
     )
     cursor = connection.cursor()
-    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {os.environ.get('DB_NAME', 'footballdb')}")
+    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {os.environ.get('DB_NAME')}")
     cursor.close()
     connection.close()
 
@@ -44,10 +87,10 @@ def populate_data():
     sql_file_path = os.path.abspath('data.sql')
     if os.path.exists('data.sql'):
         connection = mysql.connector.connect(
-            host=os.environ.get("DB_HOST", "127.0.0.1"),
-            user=os.environ.get('DB_USER', 'root'),
-            password=os.environ.get('DB_PASSWORD', 'root'),
-            database=os.environ.get('DB_NAME', 'footballdb')
+            host=os.environ.get("DB_HOST"),
+            user=os.environ.get('DB_USER'),
+            password=os.environ.get('DB_PASSWORD'),
+            database=os.environ.get('DB_NAME')
         )
         cursor = connection.cursor()
         with open(sql_file_path, 'r') as sql_file:

@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import stadium_controller
 from ..domain.stadium import Stadium
 
@@ -7,6 +8,7 @@ stadium_bp = Blueprint('stadium', __name__, url_prefix='/stadium')
 
 
 @stadium_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_stadiums() -> Response:
     """
     Get all stadiums
@@ -30,6 +32,7 @@ def get_all_stadiums() -> Response:
 
 
 @stadium_bp.route('', methods=['POST'])
+@jwt_required()
 def create_stadium() -> Response:
     """
     Create a new stadium
@@ -62,6 +65,7 @@ def create_stadium() -> Response:
 
 
 @stadium_bp.route('/<int:stadium_id>', methods=['GET'])
+@jwt_required()
 def get_stadium(stadium_id: int) -> Response:
     """
     Get stadium by ID
@@ -92,6 +96,7 @@ def get_stadium(stadium_id: int) -> Response:
 
 
 @stadium_bp.route('/<int:stadium_id>', methods=['PUT'])
+@jwt_required()
 def update_stadium(stadium_id: int) -> Response:
     """
     Update a stadium (full update)
@@ -129,6 +134,7 @@ def update_stadium(stadium_id: int) -> Response:
 
 
 @stadium_bp.route('/<int:stadium_id>', methods=['PATCH'])
+@jwt_required()
 def patch_stadium(stadium_id: int) -> Response:
     """
     Partially update a stadium
@@ -162,6 +168,7 @@ def patch_stadium(stadium_id: int) -> Response:
 
 
 @stadium_bp.route('/<int:stadium_id>', methods=['DELETE'])
+@jwt_required()
 def delete_stadium(stadium_id: int) -> Response:
     """
     Delete a stadium by ID

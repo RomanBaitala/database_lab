@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import referee_controller
 from ..domain.referee import Referee
 
@@ -7,6 +8,7 @@ referee_bp = Blueprint('referee', __name__, url_prefix='/referee')
 
 
 @referee_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_referees() -> Response:
     """
     Get all referees

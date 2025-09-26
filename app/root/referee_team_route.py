@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import referee_team_controller
 from ..domain.referee_team import RefereeTeam
 
@@ -7,6 +8,7 @@ referee_team_bp = Blueprint('referee_team', __name__, url_prefix='/referee_team'
 
 
 @referee_team_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_referee_teams() -> Response:
     """
     Get all referee teams
@@ -29,6 +31,7 @@ def get_all_referee_teams() -> Response:
 
 
 @referee_team_bp.route('', methods=['POST'])
+@jwt_required()
 def create_referee_team() -> Response:
     """
     Create a new referee team
@@ -59,6 +62,7 @@ def create_referee_team() -> Response:
 
 
 @referee_team_bp.route('/<int:referee_team_id>', methods=['GET'])
+@jwt_required()
 def get_referee_team(referee_team_id: int) -> Response:
     """
     Get referee team by ID
@@ -88,6 +92,7 @@ def get_referee_team(referee_team_id: int) -> Response:
 
 
 @referee_team_bp.route('/<int:referee_team_id>', methods=['PUT'])
+@jwt_required()
 def update_referee_team(referee_team_id: int) -> Response:
     """
     Update a referee team (full update)
@@ -124,6 +129,7 @@ def update_referee_team(referee_team_id: int) -> Response:
 
 
 @referee_team_bp.route('/<int:referee_team_id>', methods=['PATCH'])
+@jwt_required()
 def patch_referee_team(referee_team_id: int) -> Response:
     """
     Partially update a referee team
@@ -157,6 +163,7 @@ def patch_referee_team(referee_team_id: int) -> Response:
 
 
 @referee_team_bp.route('/<int:referee_team_id>', methods=['DELETE'])
+@jwt_required()
 def delete_referee_team(referee_team_id: int) -> Response:
     """
     Delete a referee team by ID

@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import match_controller
 from ..domain.match import FMatch
 
@@ -7,6 +8,7 @@ match_bp = Blueprint('match', __name__, url_prefix='/match')
 
 
 @match_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_matches():
     """
     Get all matches
@@ -34,6 +36,7 @@ def get_all_matches():
 
 
 @match_bp.route('', methods=['POST'])
+@jwt_required()
 def create_match():
     """
     Create a new match
@@ -101,6 +104,7 @@ def create_match():
 
 
 @match_bp.route('/<int:match_id>', methods=['GET'])
+@jwt_required()
 def get_match(match_id: int):
     """
     Get a match by ID
@@ -139,6 +143,7 @@ def get_match(match_id: int):
 
 
 @match_bp.route('/<int:match_id>', methods=['PUT'])
+@jwt_required()
 def update_match(match_id: int):
     """
     Update a match by ID
@@ -199,6 +204,7 @@ def update_match(match_id: int):
 
 
 @match_bp.route('/<int:match_id>', methods=['PATCH'])
+@jwt_required()
 def patch_match(match_id: int):
     """
     Partially update a match by ID
@@ -243,6 +249,7 @@ def patch_match(match_id: int):
 
 
 @match_bp.route('/<int:match_id>', methods=['DELETE'])
+@jwt_required()
 def delete_match(match_id: int):
     """
     Delete a match by ID
@@ -269,4 +276,3 @@ def delete_match(match_id: int):
     if not deleted:
         return make_response(jsonify({"error": "Match not found"}), HTTPStatus.NOT_FOUND)
     return make_response("Match deleted", HTTPStatus.OK)
-

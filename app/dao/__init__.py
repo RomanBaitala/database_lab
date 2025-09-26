@@ -11,6 +11,7 @@ from .goal_dao import GoalDAO
 from .player_dao import PlayerDAO
 from .player_has_start_lineup_dao import PlayerHasStartLineupDAO
 from .referee_has_referee_team_dao import RefereeHasRefereeTeamDAO
+from .user_dao import UserDAO
 
 player_stat_dao = PlayerStatDAO()
 match_stat_dao = MatchStatDAO()
@@ -25,3 +26,4 @@ goal_dao = GoalDAO()
 player_dao = PlayerDAO()
 player_has_start_lineup_dao = PlayerHasStartLineupDAO()
 referee_has_referee_team_dao = RefereeHasRefereeTeamDAO()
+user_dao = UserDAO()

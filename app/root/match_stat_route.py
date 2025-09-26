@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import match_stat_controller
 from ..domain.match_stat import MatchStat
 
@@ -7,6 +8,7 @@ match_stat_bp = Blueprint('match_stat', __name__, url_prefix='/match_stat')
 
 
 @match_stat_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_match_stats() -> Response:
     """
     Get all match stats
@@ -32,6 +34,7 @@ def get_all_match_stats() -> Response:
 
 
 @match_stat_bp.route('', methods=['POST'])
+@jwt_required()
 def create_match_stat() -> Response:
     """
     Create a new match stat
@@ -68,6 +71,7 @@ def create_match_stat() -> Response:
 
 
 @match_stat_bp.route('/<int:match_stat_id>', methods=['GET'])
+@jwt_required()
 def get_match_stat(match_stat_id: int) -> Response:
     """
     Get match stat by ID
@@ -100,6 +104,7 @@ def get_match_stat(match_stat_id: int) -> Response:
 
 
 @match_stat_bp.route('/<int:match_stat_id>', methods=['PUT'])
+@jwt_required()
 def update_match_stat(match_stat_id: int) -> Response:
     """
     Update match stat (full update)
@@ -138,6 +143,7 @@ def update_match_stat(match_stat_id: int) -> Response:
 
 
 @match_stat_bp.route('/<int:match_stat_id>', methods=['PATCH'])
+@jwt_required()
 def patch_match_stat(match_stat_id: int) -> Response:
     """
     Update match stat (partial update)
@@ -172,6 +178,7 @@ def patch_match_stat(match_stat_id: int) -> Response:
 
 
 @match_stat_bp.route('/<int:match_stat_id>', methods=['DELETE'])
+@jwt_required()
 def delete_match_stat(match_stat_id: int) -> Response:
     """
     Delete match stat by ID

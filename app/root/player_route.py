@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import player_controller
 from ..domain.player import Player
 
@@ -7,6 +8,7 @@ player_bp = Blueprint('player', __name__, url_prefix='/player')
 
 
 @player_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_players() -> Response:
     """
     Get all players
@@ -32,6 +34,7 @@ def get_all_players() -> Response:
 
 
 @player_bp.route('', methods=['POST'])
+@jwt_required()
 def create_player() -> Response:
     """
     Create a new player
@@ -68,6 +71,7 @@ def create_player() -> Response:
 
 
 @player_bp.route('/<int:player_id>', methods=['GET'])
+@jwt_required()
 def get_player(player_id: int) -> Response:
     """
     Get player by ID
@@ -100,6 +104,7 @@ def get_player(player_id: int) -> Response:
 
 
 @player_bp.route('/<int:player_id>', methods=['PUT'])
+@jwt_required()
 def update_player(player_id: int) -> Response:
     """
     Update a player (full update)
@@ -139,6 +144,7 @@ def update_player(player_id: int) -> Response:
 
 
 @player_bp.route('/<int:player_id>', methods=['PATCH'])
+@jwt_required()
 def patch_player(player_id: int) -> Response:
     """
     Partially update a player
@@ -173,6 +179,7 @@ def patch_player(player_id: int) -> Response:
 
 
 @player_bp.route('/<int:player_id>', methods=['DELETE'])
+@jwt_required()
 def delete_player(player_id: int) -> Response:
     """
     Delete a player by ID

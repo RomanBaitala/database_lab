@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import player_has_start_lineup_controller
 from ..domain.player_has_start_lineup import PlayerHasStartLineup
 
@@ -7,6 +8,7 @@ player_has_start_lineup_bp = Blueprint('player_has_start_lineup', __name__, url_
 
 
 @player_has_start_lineup_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_player_has_start_lineups() -> Response:
     """
     Get all player-start_lineup relations
@@ -29,6 +31,7 @@ def get_all_player_has_start_lineups() -> Response:
 
 
 @player_has_start_lineup_bp.route('', methods=['POST'])
+@jwt_required()
 def create_player_has_start_lineup() -> Response:
     """
     Create a new player-start_lineup relation
@@ -59,6 +62,7 @@ def create_player_has_start_lineup() -> Response:
 
 
 @player_has_start_lineup_bp.route('/<int:player_has_start_lineup_id>', methods=['GET'])
+@jwt_required()
 def get_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
     """
     Get player-start_lineup relation by ID
@@ -88,6 +92,7 @@ def get_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
 
 
 @player_has_start_lineup_bp.route('/<int:player_has_start_lineup_id>', methods=['PUT'])
+@jwt_required()
 def update_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
     """
     Update a player-start_lineup relation (full update)
@@ -123,6 +128,7 @@ def update_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
 
 
 @player_has_start_lineup_bp.route('/<int:player_has_start_lineup_id>', methods=['PATCH'])
+@jwt_required()
 def patch_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
     """
     Partially update a player-start_lineup relation
@@ -156,6 +162,7 @@ def patch_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
 
 
 @player_has_start_lineup_bp.route('/<int:player_has_start_lineup_id>', methods=['DELETE'])
+@jwt_required()
 def delete_player_has_start_lineup(player_has_start_lineup_id: int) -> Response:
     """
     Delete a player-start_lineup relation by ID

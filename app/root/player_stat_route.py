@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import player_stat_controller
 from ..domain.player_stat import PlayerStat
 
@@ -7,6 +8,7 @@ player_stat_bp = Blueprint('player_stat', __name__, url_prefix='/player_stat')
 
 
 @player_stat_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_player_stats() -> Response:
     """
     Get all player stats
@@ -31,6 +33,7 @@ def get_all_player_stats() -> Response:
 
 
 @player_stat_bp.route('', methods=['POST'])
+@jwt_required()
 def create_player_stat() -> Response:
     """
     Create a new player stat
@@ -65,6 +68,7 @@ def create_player_stat() -> Response:
 
 
 @player_stat_bp.route('/<int:player_stat_id>', methods=['GET'])
+@jwt_required()
 def get_player_stat(player_stat_id: int) -> Response:
     """
     Get player stat by ID
@@ -96,6 +100,7 @@ def get_player_stat(player_stat_id: int) -> Response:
 
 
 @player_stat_bp.route('/<int:player_stat_id>', methods=['PUT'])
+@jwt_required()
 def update_player_stat(player_stat_id: int) -> Response:
     """
     Update a player stat (full update)
@@ -134,6 +139,7 @@ def update_player_stat(player_stat_id: int) -> Response:
 
 
 @player_stat_bp.route('/<int:player_stat_id>', methods=['PATCH'])
+@jwt_required()
 def patch_player_stat(player_stat_id: int) -> Response:
     """
     Partially update a player stat
@@ -168,6 +174,7 @@ def patch_player_stat(player_stat_id: int) -> Response:
 
 
 @player_stat_bp.route('/<int:player_stat_id>', methods=['DELETE'])
+@jwt_required()
 def delete_player_stat(player_stat_id: int) -> Response:
     """
     Delete a player stat by ID
@@ -191,4 +198,3 @@ def delete_player_stat(player_stat_id: int) -> Response:
     """
     player_stat_controller.delete(player_stat_id)
     return make_response("PlayerStat deleted", HTTPStatus.OK)
-

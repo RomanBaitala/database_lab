@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import start_lineup_controller
 from ..domain.start_lineup import StartLineup
 
@@ -7,6 +8,7 @@ start_lineup_bp = Blueprint('start_lineup', __name__, url_prefix='/start_lineup'
 
 
 @start_lineup_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_start_lineups() -> Response:
     """
     Get all start lineups
@@ -29,6 +31,7 @@ def get_all_start_lineups() -> Response:
 
 
 @start_lineup_bp.route('', methods=['POST'])
+@jwt_required()
 def create_start_lineup() -> Response:
     """
     Create a new start lineup
@@ -59,6 +62,7 @@ def create_start_lineup() -> Response:
 
 
 @start_lineup_bp.route('/<int:start_lineup_id>', methods=['GET'])
+@jwt_required()
 def get_start_lineup(start_lineup_id: int) -> Response:
     """
     Get a start lineup by ID
@@ -89,6 +93,7 @@ def get_start_lineup(start_lineup_id: int) -> Response:
 
 
 @start_lineup_bp.route('/<int:start_lineup_id>', methods=['PUT'])
+@jwt_required()
 def update_start_lineup(start_lineup_id: int) -> Response:
     """
     Update a start lineup (full update)
@@ -125,6 +130,7 @@ def update_start_lineup(start_lineup_id: int) -> Response:
 
 
 @start_lineup_bp.route('/<int:start_lineup_id>', methods=['PATCH'])
+@jwt_required()
 def patch_start_lineup(start_lineup_id: int) -> Response:
     """
     Partially update a start lineup
@@ -158,6 +164,7 @@ def patch_start_lineup(start_lineup_id: int) -> Response:
 
 
 @start_lineup_bp.route('/<int:start_lineup_id>', methods=['DELETE'])
+@jwt_required()
 def delete_start_lineup(start_lineup_id: int) -> Response:
     """
     Delete a start lineup by ID

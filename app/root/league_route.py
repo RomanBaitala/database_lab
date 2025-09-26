@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import league_controller
 from ..domain.league import League
 
@@ -7,6 +8,7 @@ league_bp = Blueprint('league', __name__, url_prefix='/league')
 
 
 @league_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_leagues():
     """
     Get all leagues
@@ -23,6 +25,7 @@ def get_all_leagues():
 
 
 @league_bp.route('', methods=['POST'])
+@jwt_required()
 def create_league():
     """
     Create a new league
@@ -57,6 +60,7 @@ def create_league():
 
 
 @league_bp.route('/<int:league_id>', methods=['GET'])
+@jwt_required()
 def get_league(league_id: int):
     """
     Get a league by ID
@@ -90,6 +94,7 @@ def get_league(league_id: int):
 
 
 @league_bp.route('/<int:league_id>', methods=['PUT'])
+@jwt_required()
 def update_league(league_id: int):
     """
     Update a league by ID
@@ -134,6 +139,7 @@ def update_league(league_id: int):
 
 
 @league_bp.route('/<int:league_id>', methods=['PATCH'])
+@jwt_required()
 def patch_league(league_id: int):
     """
     Partially update a league by ID
@@ -176,6 +182,7 @@ def patch_league(league_id: int):
 
 
 @league_bp.route('/<int:league_id>', methods=['DELETE'])
+@jwt_required()
 def delete_league(league_id: int):
     """
     Delete a league by ID

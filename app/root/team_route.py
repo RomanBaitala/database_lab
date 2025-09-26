@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flask_jwt_extended import jwt_required
 from ..controller import team_controller
 from ..domain.team import Team
 
@@ -7,6 +8,7 @@ team_bp = Blueprint('team', __name__, url_prefix='/team')
 
 
 @team_bp.route('', methods=['GET'])
+@jwt_required()
 def get_all_teams() -> Response:
     """
     Get all teams
@@ -34,6 +36,7 @@ def get_all_teams() -> Response:
 
 
 @team_bp.route('', methods=['POST'])
+@jwt_required()
 def create_team() -> Response:
     """
     Create a new team
@@ -72,6 +75,7 @@ def create_team() -> Response:
 
 
 @team_bp.route('/<int:team_id>', methods=['GET'])
+@jwt_required()
 def get_team(team_id: int) -> Response:
     """
     Get a team by ID
@@ -105,6 +109,7 @@ def get_team(team_id: int) -> Response:
 
 
 @team_bp.route('/<int:team_id>', methods=['PUT'])
+@jwt_required()
 def update_team(team_id: int) -> Response:
     """
     Update a team (full update)
@@ -146,6 +151,7 @@ def update_team(team_id: int) -> Response:
 
 
 @team_bp.route('/<int:team_id>', methods=['PATCH'])
+@jwt_required()
 def patch_team(team_id: int) -> Response:
     """
     Partially update a team
@@ -180,6 +186,7 @@ def patch_team(team_id: int) -> Response:
 
 
 @team_bp.route('/<int:team_id>', methods=['DELETE'])
+@jwt_required()
 def delete_team(team_id: int) -> Response:
     """
     Delete a team by ID
@@ -204,4 +211,3 @@ def delete_team(team_id: int) -> Response:
     """
     team_controller.delete(team_id)
     return make_response("Team deleted", HTTPStatus.OK)
-
