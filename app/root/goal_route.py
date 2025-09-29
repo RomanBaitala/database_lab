@@ -7,31 +7,31 @@ from ..domain.goal import Goal
 goal_bp = Blueprint('goal', __name__, url_prefix='/goal')
 
 
-@goal_bp.route('', methods=['GET'])
-@jwt_required()
-def get_all_goals() -> Response:
-    """
-    Endpoint to get all goals
-    ---
-    tags:
-      - Goal
-    security:
-      - Bearer: []
-    responses:
-      200:
-        description: A list of goals
-        examples:
-          application/json: [{
-            "id": 1,
-            "match_id": 1,
-            "player_id": 1,
-            "player_team_id": 1,
-            "time": 12.5
-          }]
-      401:
-        description: Unauthorized or token has expired
-    """
-    return make_response(jsonify(goal_controller.find_all()), HTTPStatus.OK)
+# @goal_bp.route('', methods=['GET'])
+# @jwt_required()
+# def get_all_goals() -> Response:
+#     """
+#     Endpoint to get all goals
+#     ---
+#     tags:
+#       - Goal
+#     security:
+#       - Bearer: []
+#     responses:
+#       200:
+#         description: A list of goals
+#         examples:
+#           application/json: [{
+#             "id": 1,
+#             "match_id": 1,
+#             "player_id": 1,
+#             "player_team_id": 1,
+#             "time": 12.5
+#           }]
+#       401:
+#         description: Unauthorized or token has expired
+#     """
+#     return make_response(jsonify(goal_controller.find_all()), HTTPStatus.OK)
 
 
 @goal_bp.route('', methods=['POST'])
